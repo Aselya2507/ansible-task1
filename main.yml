@@ -1,0 +1,25 @@
+---
+- name: Static Web Site 
+  hosts: all
+  user: root 
+  tasks: 
+  - name: installing Apache
+    yum:
+      name: httpd
+      state: latest
+  - name: install unzip
+    package:
+      name: unzip
+      state: present
+  - name: Unarchive
+    unarchive:
+      src: https://www.free-css.com/assets/files/free-css-templates/download/page284/maker.zip
+      dest: /root/
+      remote_src: yes
+  - name: Copy website template to html
+    shell: "cp -r /root/maker/* /var/www/html/"
+  - name: start service
+    systemd:
+      name: httpd
+      state: restarted
+      enabled: yes
